@@ -1,0 +1,2 @@
+- name: Migrate database
+  shell: source "/home/ubuntu/.rvm/scripts/rvm" && cd /srv/schoolinthecloud && rake db:migrate RAILS_ENV=production executable=/bin/bash

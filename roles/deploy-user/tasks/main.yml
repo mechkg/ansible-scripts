@@ -1,0 +1,7 @@
+---
+  - name: Create deploy user
+    user: name=deploy state=present groups=sudo password={{ password }} shell=/bin/bash
+  - name: Add deploy key
+    authorized_key: user=deploy key="{{ lookup('file','deploy_id_rsa.pub') }}"
+  - name: Add deploy users to sudoers
+    lineinfile: dest=/etc/sudoers line='deploy ALL=(ALL:ALL) ALL' regexp='^deploy ALL=' state=present

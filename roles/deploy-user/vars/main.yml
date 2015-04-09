@@ -1,0 +1,2 @@
+---
+  password: "{{ lookup('file', 'deploy_password') }}"

@@ -1,0 +1,11 @@
+- name: Check if secrets.yml exists
+  stat: path=/srv/{{ app_name }}/config/secrets.yml
+  register: secrets
+
+- name: Copy secrets.yml template
+  template: src=secrets.yml.j2 dest=/srv/{{ app_name }}/config/secrets.yml
+  when: secrets.stat.exists == false
+
+- name: Generate secret key and append to secrets.yml
+  shell: source "/home/deploy/.rvm/scripts/rvm" && cd /srv/{{ app_name}} && rake secret >> /srv/{{ app_name }}/config/secrets.yml executable=/bin/bash
+  when: secrets.stat.exists == false

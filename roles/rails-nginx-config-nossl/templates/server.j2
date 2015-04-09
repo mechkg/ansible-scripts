@@ -1,0 +1,12 @@
+server {
+   rails_env {{ rails_env }};
+   listen 80;
+   server_name {{ server_name }};
+   root /srv/{{ app_name }}/public;
+   passenger_enabled on;
+   client_max_body_size 100m;
+   passenger_intercept_errors on;
+   error_page 500 /500.html;
+   error_page 404 /404.html;
+   error_page 422 /422.html;
+}

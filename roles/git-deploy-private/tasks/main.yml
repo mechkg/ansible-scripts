@@ -1,0 +1,24 @@
+- name: Make sure git is installed
+  sudo: yes
+  apt:
+    update-cache: yes
+    cache_valid_time: 86400
+    name: git
+    state: present
+
+- name: Copy git repo key
+  copy: src=github-deploy dest=/home/deploy/.ssh/github-deploy mode=0600
+
+- name: Create application directory
+  sudo: yes
+  file: path=/srv/{{ app_name }} state=directory owner=deploy
+  register: app_dir
+
+- name: Checkout app files
+  git: 
+    repo: {{ git_repo }}
+    dest: /srv/{{ app_name }}
+    key_file: /home/deploy/.ssh/github-deploy
+    version: {{ git_branch }}
+    accept_hostkey: true
+  when: app_dir.changed

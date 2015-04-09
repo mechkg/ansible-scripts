@@ -1,0 +1,29 @@
+- name: Install nginx
+  apt: name=nginx state=present update_cache=yes
+
+- name: Copy nginx config
+  copy: src=nginx.conf dest=/etc/nginx/nginx.conf backup=yes
+
+- name: Create maintenance directory
+  file: name=/srv/maintenance state=directory
+
+- name: Copy maintenance page
+  copy: src=maintenance.html dest=/srv/maintenance/maintenance.html
+
+- name: Copy maintenance stylesheet
+  copy: src=errors.css dest=/srv/maintenance/errors.css
+
+- name: Copy logo
+  copy: src=logo.png dest=/srv/maintenance/logo.png
+
+- name: Copy SitC maintenance site config
+  copy: src=schoolinthecloud-maintenance dest=/etc/nginx/sites-available/schoolinthecloud-maintenance
+
+- name: Enable SitC maintenance site
+  file: src=/etc/nginx/sites-available/schoolinthecloud-maintenance dest=/etc/nginx/sites-enabled/schoolinthecloud-maintenance state=link
+
+- name: Disable default nginx site
+  file: path=/etc/nginx/sites-enabled/default state=absent
+
+- name: Restart nginx
+  service: name=nginx state=restarted

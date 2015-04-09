@@ -1,0 +1,11 @@
+- name: Stop nginx
+  sudo: yes
+  service: name=nginx state=stopped
+
+- name: Pull source code updates from GitHub
+  git: 
+    repo: ssh://git@github.com/digitalinteraction/schoolinthecloud
+    dest: /srv/schoolinthecloud
+    key_file: /home/ubuntu/.ssh/sitc-github-deploy
+    version: master
+    accept_hostkey: true

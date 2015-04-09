@@ -1,0 +1,14 @@
+- name: Install MySQL headers, node.js and imagemagick
+  sudo: yes
+  apt:
+    update-cache: yes
+    cache_valid_time: 86400
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - libmysqld-dev
+    - nodejs
+    - imagemagick
+
+- name: Install Ruby dependencies
+  shell: source "/home/deploy/.rvm/scripts/rvm" && cd /srv/{{ app_name }} && bundle install executable=/bin/bash

@@ -1,0 +1,20 @@
+- name: Make sure git is installed
+  sudo: yes
+  apt:
+    update-cache: yes
+    cache_valid_time: 86400
+    name: git
+    state: present
+
+- name: Create application directory
+  sudo: yes
+  file: path=/srv/{{ app_name }} state=directory owner=deploy
+  register: app_dir
+
+- name: Checkout app files
+  git: 
+    repo: "{{ git_deploy_repo }}"
+    dest: /srv/{{ app_name }}
+    version: "{{ git_deploy_branch }}"
+    accept_hostkey: true
+  when: app_dir.changed

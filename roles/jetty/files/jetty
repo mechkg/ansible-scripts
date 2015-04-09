@@ -1,0 +1,3 @@
+JAVA_OPTIONS="-Xms100m -Xmx300m -Djetty.host=127.0.0.1"
+JETTY_HOME=/srv/jetty
+JETTY_USER=jetty

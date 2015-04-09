@@ -1,0 +1,15 @@
+# Do not store private keys
+
+roles/deploy-user/files/deploy_id_rsa
+roles/deploy-user/files/deploy_id_rsa.pub
+roles/deploy-user/files/deploy_password
+
+roles/git-deploy-private/files/github-deploy
+
+# Do not store local configuration
+
+ansible.cfg
+ocf-setup.yml
+
+roles/ocf-dependencies
+

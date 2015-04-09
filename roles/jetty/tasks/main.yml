@@ -1,0 +1,35 @@
+---
+  - name: Create Jetty directory
+    file: path=/srv/jetty state=directory
+    register: jetty_dir
+
+  - name: Download Jetty
+    get_url: url=http://eclipse.org/downloads/download.php?file=/jetty/9.2.3.v20140905/dist/jetty-distribution-9.2.3.v20140905.tar.gz&r=1
+               dest=/tmp sha256sum=9a47f2d02efa52583db3195623080ff7ccd96b6aa9150aeaa43e1203de22770a
+    when: jetty_dir.changed
+
+  - name: Extract Jetty
+    command: "{{item}}"
+    with_items:
+      - tar xf /tmp/jetty-distribution-9.2.3.v20140905.tar.gz -C /tmp/
+      - mv -T /tmp/jetty-distribution-9.2.3.v20140905 /srv/jetty
+    when: jetty_dir.changed
+
+  - name: Copy modified Jetty init script
+    copy: src=jetty.sh dest=/srv/jetty/bin/jetty.sh
+
+  - name: Copy Jetty environment variables
+    copy: src=jetty dest=/etc/default/jetty
+
+  - name: Add Jetty init.d script
+    file: path=/etc/init.d/jetty src=/srv/jetty/bin/jetty.sh state=link
+
+  - name: Add user for Jetty
+    user: name=jetty state=present
+
+  - name: Change ownership of Jetty dir to jetty user
+    file: path=/srv/jetty owner=jetty group=jetty state=directory recurse=yes
+    when: jetty_dir.changed
+
+  - name: Start Jetty service
+    service: name=jetty state=started enabled=yes
