@@ -16,9 +16,9 @@
 
 - name: Checkout app files
   git: 
-    repo: {{ git_repo }}
+    repo: {{ git_deploy_repo }}
     dest: /srv/{{ app_name }}
     key_file: /home/deploy/.ssh/github-deploy
-    version: {{ git_branch }}
+    version: {{ git_deploy_branch }}
     accept_hostkey: true
   when: app_dir.changed
